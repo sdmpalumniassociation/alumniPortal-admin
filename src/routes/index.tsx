@@ -27,6 +27,7 @@ const Logout = React.lazy(() => import('../pages/auth/Logout'));
 
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
+const Users = React.lazy(() => import('../pages/users'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -103,9 +104,6 @@ const AdvancedTable = React.lazy(() => import('../pages/tables/AdvancedTable'));
 const ApexChart = React.lazy(() => import('../pages/chart/ApexChart'));
 const ChartJs = React.lazy(() => import('../pages/chart/ChartJs'));
 
-// maps
-const GoogleMaps = React.lazy(() => import('../pages/maps/GoogleMaps'));
-const VectorMaps = React.lazy(() => import('../pages/maps/VectorMaps'));
 
 // lamding
 const Landing = React.lazy(() => import('../pages/Landing'));
@@ -192,6 +190,10 @@ const AllRoutes = () => {
         {
           path: 'dashboard',
           element: <LoadComponent component={DashBoard1} />,
+        },
+        {
+          path: 'users',
+          element: <LoadComponent component={Users} />,
         },
         {
           path: 'apps',
@@ -442,19 +444,6 @@ const AllRoutes = () => {
             {
               path: 'chartjs',
               element: <LoadComponent component={ChartJs} />,
-            },
-          ],
-        },
-        {
-          path: 'maps',
-          children: [
-            {
-              path: 'google',
-              element: <LoadComponent component={GoogleMaps} />,
-            },
-            {
-              path: 'vector',
-              element: <LoadComponent component={VectorMaps} />,
             },
           ],
         },

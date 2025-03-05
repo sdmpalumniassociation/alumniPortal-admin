@@ -109,20 +109,19 @@ const Login = () => {
                 <VerticalForm<UserData>
                     onSubmit={onSubmit}
                     resolver={schemaResolver}
-                    defaultValues={{ email: 'adminto@coderthemes.com', password: 'test' }}
                 >
                     <FormInput
                         type="email"
                         name="email"
                         label={t('Email address')}
-                        placeholder={t('hello@coderthemes.com')}
+                        placeholder={t('Enter your email address')}
                         containerClass={'mb-3'}
                     />
                     <FormInput
                         label={t('Password')}
                         type="password"
                         name="password"
-                        placeholder="Enter your password"
+                        placeholder={t('Enter your password')}
                         containerClass={'mb-3'}
                     ></FormInput>
 

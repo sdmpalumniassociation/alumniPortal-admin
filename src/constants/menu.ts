@@ -20,8 +20,14 @@ const MENU_ITEMS: MenuItemTypes[] = [
         label: 'Dashboard',
         isTitle: false,
         icon: 'mdi mdi-view-dashboard-outline',
-        badge: { variant: 'success', text: '9+' },
         url: '/dashboard',
+    },
+    {
+        key: 'users',
+        label: 'Users',
+        isTitle: false,
+        icon: 'mdi mdi-account-group',
+        url: '/users',
     },
 
     { key: 'apps', label: 'Apps', isTitle: true },
