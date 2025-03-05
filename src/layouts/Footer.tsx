@@ -7,7 +7,7 @@ const Footer = () => {
             <Container fluid>
                 <Row>
                     <Col md={6}>
-                        {new Date().getFullYear()} &copy; Adminto theme by <Link to="#">Coderthemes</Link>
+                        {new Date().getFullYear()} &copy; Developed by <Link to="#">Phoedex.com</Link>
                     </Col>
                     <Col md={6}>
                         <div className="text-md-end footer-links d-none d-md-block">
