@@ -110,22 +110,7 @@ const IndicatorsContainer = (props: any) => {
     );
 };
 
-/* custom menu list */
-const MenuList = (props: any) => {
-    const { options } = props.selectProps;
 
-    return (
-        <components.MenuList {...props}>
-            {/* menu header */}
-            <div className="dropdown-header noti-title">
-                <h5 className="text-overflow mb-2">
-                    Found {options.length < 10 ? ('0' + options.length).slice(-2) : options.length} results
-                </h5>
-            </div>
-            {props.children}
-        </components.MenuList>
-    );
-};
 
 /* fomates the option label */
 const handleFormatOptionLabel = (option: SearchOptions) => {
@@ -133,12 +118,11 @@ const handleFormatOptionLabel = (option: SearchOptions) => {
     return <div>{formattedOption}</div>;
 };
 
-const TopbarSearch = ({ options }: TopbarSearchProps) => {
+const TopbarSearch = () => {
     return (
         <Select
-            components={{ IndicatorsContainer, MenuList }}
+            components={{ IndicatorsContainer }}
             placeholder={'Search...'}
-            options={formateOptions(options)}
             formatOptionLabel={handleFormatOptionLabel}
             isOptionDisabled={(option) => option.type === 'title'}
             maxMenuHeight={350}

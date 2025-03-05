@@ -12,20 +12,17 @@ import { LayoutTypes } from '../../constants';
 import { useRedux } from '../../hooks';
 
 // components
-import SearchDropdown from '../../components/topbar/SearchDropdown';
-import ThemeSetting from '../../components/topbar/ThemeSetting';
 import TopbarSearch from '../../components/topbar/TopbarSearch';
-import NotificationDropdown from '../../components/topbar/NotificationDropdown';
 import ProfileDropdown from '../../components/topbar/ProfileDropdown';
 
 // dummy data
-import { notifications, profileMenus, searchOptions } from './data';
+import { profileMenus } from './data';
 
 // images
-import logoSm from '../../assets/images/logo-sm.png';
-import avatar1 from '../../assets/images/users/user-1.jpg';
-import logoDark from '../../assets/images/logo-dark.png';
-import logoLight from '../../assets/images/logo-light.png';
+import logoSm from '../../assets/images/sdmp-logo.png';
+import avatar1 from '../../assets/images/users/sdmp-logo.png';
+import logoDark from '../../assets/images/sdmp-logo.png';
+import logoLight from '../../assets/images/sdmp-logo.png';
 
 type TopbarProps = {
     openLeftMenuCallBack: () => void;
@@ -61,21 +58,12 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
             <div className={containerClass}>
                 <ul className="list-unstyled topnav-menu float-end mb-0">
                     <li className="d-none d-lg-block">
-                        <TopbarSearch options={searchOptions} />
+                        <TopbarSearch />
                     </li>
 
-                    <li className="dropdown d-inline-block d-lg-none">
-                        <SearchDropdown />
-                    </li>
-                    <li className="dropdown notification-list topbar-dropdown">
-                        <NotificationDropdown notifications={notifications} />
-                    </li>
                     <li className="dropdown notification-list topbar-dropdown">
                         {/* User */}
-                        <ProfileDropdown userImage={avatar1} username={'Nowak'} menuItems={profileMenus} />
-                    </li>
-                    <li className="dropdown notification-list">
-                        <ThemeSetting handleRightSideBar={handleRightSideBar} />
+                        <ProfileDropdown userImage={avatar1} username={'Admin'} menuItems={profileMenus} />
                     </li>
                 </ul>
 

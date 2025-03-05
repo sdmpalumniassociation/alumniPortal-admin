@@ -8,9 +8,7 @@
 
 // authentication pages background
 body.authentication-bg {
-    background-image: $auth-img-bg;
-    background-size: cover;
-    background-position: center;
+    background-color: #f3f4f6;
 }
 
 // Logout page
@@ -19,6 +17,14 @@ body.authentication-bg {
 }
 
 .auth-logo {
+    .logo-lg {
+        img {
+            height: 150px;
+            width: 150px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+        }
+    }
     .logo-light {
         display: $logo-auth-light-display !important;
     }

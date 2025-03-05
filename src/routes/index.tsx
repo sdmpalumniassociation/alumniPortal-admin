@@ -4,14 +4,10 @@ import { useRoutes } from 'react-router-dom';
 // layouts
 import DefaultLayout from '../layouts/Default';
 import VerticalLayout from '../layouts/Vertical';
-import HorizontalLayout from '../layouts/Horizontal/';
 
 // components
 import PrivateRoute from './PrivateRoute';
 import Root from './Root';
-
-// constants
-import { LayoutTypes } from '../constants';
 
 // hooks
 import { useRedux } from '../hooks';
@@ -19,10 +15,8 @@ import { useRedux } from '../hooks';
 // lazy load all the views
 // auth
 const Login = React.lazy(() => import('../pages/auth/Login'));
-const Register = React.lazy(() => import('../pages/auth/Register'));
 const Confirm = React.lazy(() => import('../pages/auth/Confirm'));
 const ForgetPassword = React.lazy(() => import('../pages/auth/ForgetPassword'));
-const LockScreen = React.lazy(() => import('../pages/auth/LockScreen'));
 const Logout = React.lazy(() => import('../pages/auth/Logout'));
 
 // dashboards
@@ -130,14 +124,6 @@ const AllRoutes = () => {
   const getLayout = () => {
     let layoutCls: React.ComponentType = VerticalLayout;
 
-    switch (layout.layoutType) {
-      case LayoutTypes.LAYOUT_HORIZONTAL:
-        layoutCls = HorizontalLayout;
-        break;
-      default:
-        layoutCls = VerticalLayout;
-        break;
-    }
     return layoutCls;
   };
   let Layout = getLayout();
@@ -153,10 +139,8 @@ const AllRoutes = () => {
           path: 'auth',
           children: [
             { path: 'login', element: <LoadComponent component={Login} /> },
-            { path: 'register', element: <LoadComponent component={Register} /> },
             { path: 'confirm', element: <LoadComponent component={Confirm} /> },
             { path: 'forget-password', element: <LoadComponent component={ForgetPassword} /> },
-            { path: 'lock-screen', element: <LoadComponent component={LockScreen} /> },
             { path: 'logout', element: <LoadComponent component={Logout} /> },
           ],
         },

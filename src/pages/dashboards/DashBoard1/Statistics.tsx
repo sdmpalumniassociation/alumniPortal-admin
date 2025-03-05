@@ -9,14 +9,14 @@ const Statistics = () => {
         <Row>
             <Col xl={3} md={6}>
                 <StatisticsWidget1
-                    title="Total Revenue"
+                    title="Total Users"
                     data={58}
-                    stats={256}
+                    stats={1000}
                     color={'#f05050'}
-                    subTitle="Revenue today"
+                    subTitle="Total Users"
                 />
             </Col>
-            <Col xl={3} md={6}>
+            {/* <Col xl={3} md={6}>
                 <StatisticsWidget2
                     variant="success"
                     title="Sales Analytics"
@@ -46,7 +46,7 @@ const Statistics = () => {
                     subTitle="Revenue today"
                     progress={77}
                 />
-            </Col>
+            </Col> */}
         </Row>
     );
 };
