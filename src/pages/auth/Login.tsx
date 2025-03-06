@@ -1,25 +1,15 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Alert, Row, Col } from 'react-bootstrap';
-import { Navigate, Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-
-// hooks
-import { useRedux } from '../../hooks/';
-
-// actions
-import { resetAuth, loginUser } from '../../redux/actions';
+import config from '../../config';
 
 // components
 import { VerticalForm, FormInput } from '../../components/form/';
 import Loader from '../../components/Loader';
-
 import AuthLayout from './AuthLayout';
-
-type LocationState = {
-    from?: Location;
-};
 
 type UserData = {
     email: string;
@@ -46,18 +36,9 @@ const BottomLink = () => {
 
 const Login = () => {
     const { t } = useTranslation();
-    const { dispatch, appSelector } = useRedux();
-
-    const { user, userLoggedIn, loading, error } = appSelector((state) => ({
-        user: state.Auth.user,
-        loading: state.Auth.loading,
-        error: state.Auth.error,
-        userLoggedIn: state.Auth.userLoggedIn,
-    }));
-
-    useEffect(() => {
-        dispatch(resetAuth());
-    }, [dispatch]);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     /*
     form validation schema
@@ -72,69 +53,85 @@ const Login = () => {
     /*
     handle form submission
     */
-    const onSubmit = (formData: UserData) => {
-        dispatch(loginUser(formData['email'], formData['password']));
+    const onSubmit = async (formData: UserData) => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const response = await fetch(`${config.API_URL}/admin/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Store token and user data in localStorage
+                localStorage.setItem('adminToken', data.token);
+                localStorage.setItem('adminUser', JSON.stringify(data.admin));
+                // Redirect to dashboard
+                navigate('/dashboard');
+            } else {
+                setError(data.message || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('Network error occurred');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const location = useLocation();
-    let redirectUrl = '/';
-
-    if (location.state) {
-        const { from } = location.state as LocationState;
-        redirectUrl = from ? from.pathname : '/';
-    }
-
     return (
-        <>
-            {userLoggedIn && user && <Navigate to={redirectUrl} replace />}
+        <AuthLayout bottomLinks={<BottomLink />}>
+            <div className="text-center mb-4">
+                <h4 className="text-uppercase mt-0">{t('Admin Login')}</h4>
+            </div>
 
-            <AuthLayout bottomLinks={<BottomLink />}>
-                <div className="text-center mb-4">
-                    <h4 className="text-uppercase mt-0">{t('Sign In')}</h4>
+            {error && (
+                <Alert variant="danger" className="my-2">
+                    {error}
+                </Alert>
+            )}
+            {loading && <Loader />}
+
+            <VerticalForm<UserData>
+                onSubmit={onSubmit}
+                resolver={schemaResolver}
+            >
+                <FormInput
+                    type="email"
+                    name="email"
+                    label={t('Email address')}
+                    placeholder={t('Enter your email address')}
+                    containerClass={'mb-3'}
+                />
+                <FormInput
+                    label={t('Password')}
+                    type="password"
+                    name="password"
+                    placeholder={t('Enter your password')}
+                    containerClass={'mb-3'}
+                />
+
+                <FormInput
+                    type="checkbox"
+                    name="checkbox"
+                    label={t('Remember me')}
+                    containerClass={'mb-3'}
+                    defaultChecked
+                />
+
+                <div className="text-center d-grid mb-3">
+                    <Button variant="primary" type="submit" disabled={loading}>
+                        {t('Log In')}
+                    </Button>
                 </div>
-
-                {error && (
-                    <Alert variant="danger" className="my-2">
-                        {error}
-                    </Alert>
-                )}
-                {loading && <Loader />}
-
-                <VerticalForm<UserData>
-                    onSubmit={onSubmit}
-                    resolver={schemaResolver}
-                >
-                    <FormInput
-                        type="email"
-                        name="email"
-                        label={t('Email address')}
-                        placeholder={t('Enter your email address')}
-                        containerClass={'mb-3'}
-                    />
-                    <FormInput
-                        label={t('Password')}
-                        type="password"
-                        name="password"
-                        placeholder={t('Enter your password')}
-                        containerClass={'mb-3'}
-                    ></FormInput>
-
-                    <FormInput
-                        type="checkbox"
-                        name="checkbox"
-                        label={t('Remember me')}
-                        containerClass={'mb-3'}
-                        defaultChecked
-                    />
-
-                    <div className="text-center d-grid mb-3">
-                        <Button variant="primary" type="submit" disabled={loading}>
-                            {t('Log In')}
-                        </Button>
-                    </div>
-                </VerticalForm>
-            </AuthLayout>
-        </>
+            </VerticalForm>
+        </AuthLayout>
     );
 };
 

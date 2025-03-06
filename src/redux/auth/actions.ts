@@ -3,30 +3,26 @@ import { AuthActionTypes } from './constants';
 
 export type AuthActionType = {
     type:
-        | AuthActionTypes.API_RESPONSE_SUCCESS
-        | AuthActionTypes.API_RESPONSE_ERROR
-        | AuthActionTypes.FORGOT_PASSWORD
-        | AuthActionTypes.FORGOT_PASSWORD_CHANGE
-        | AuthActionTypes.LOGIN_USER
-        | AuthActionTypes.LOGOUT_USER
-        | AuthActionTypes.RESET
-        | AuthActionTypes.SIGNUP_USER;
+    | AuthActionTypes.API_RESPONSE_SUCCESS
+    | AuthActionTypes.API_RESPONSE_ERROR
+    | AuthActionTypes.FORGOT_PASSWORD
+    | AuthActionTypes.FORGOT_PASSWORD_CHANGE
+    | AuthActionTypes.LOGIN_USER
+    | AuthActionTypes.LOGOUT_USER
+    | AuthActionTypes.RESET
+    | AuthActionTypes.SIGNUP_USER;
     payload: {} | string;
 };
 
-type UserData = {
-    id: number;
+type AdminData = {
+    id: string;
     email: string;
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
+    fullName: string;
     role: string;
-    token: string;
 };
 
 // common success
-export const authApiResponseSuccess = (actionType: string, data: UserData | {}): AuthActionType => ({
+export const authApiResponseSuccess = (actionType: string, data: AdminData | {}): AuthActionType => ({
     type: AuthActionTypes.API_RESPONSE_SUCCESS,
     payload: { actionType, data },
 });
@@ -36,9 +32,9 @@ export const authApiResponseError = (actionType: string, error: string): AuthAct
     payload: { actionType, error },
 });
 
-export const loginUser = (email: string, password: string): AuthActionType => ({
+export const loginUser = (admin: AdminData, token: string): AuthActionType => ({
     type: AuthActionTypes.LOGIN_USER,
-    payload: { email, password },
+    payload: { admin, token }
 });
 
 export const logoutUser = (): AuthActionType => ({
