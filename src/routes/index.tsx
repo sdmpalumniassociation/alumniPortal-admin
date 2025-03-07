@@ -22,6 +22,7 @@ const Logout = React.lazy(() => import('../pages/auth/Logout'));
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
 const Users = React.lazy(() => import('../pages/users'));
+const BroadcastMail = React.lazy(() => import('../pages/broadcast-mail'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -178,6 +179,10 @@ const AllRoutes = () => {
                 {
                     path: 'users',
                     element: <LoadComponent component={Users} />,
+                },
+                {
+                    path: 'broadcast-mail',
+                    element: <LoadComponent component={BroadcastMail} />,
                 },
                 {
                     path: 'apps',

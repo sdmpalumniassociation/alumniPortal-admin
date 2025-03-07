@@ -23,6 +23,7 @@ const profileMenus: ProfileMenu[] = [
 const searchOptions: SearchOptions[] = [
     { value: '1', label: 'Dashboard', icon: 'fe-home', type: 'page' },
     { value: '2', label: 'Users', icon: 'fe-users', type: 'page' },
+    { value: '3', label: 'Broadcast Mail', icon: 'fe-mail', type: 'page' },
 ];
 
 export { profileMenus, searchOptions };

@@ -29,6 +29,13 @@ const MENU_ITEMS: MenuItemTypes[] = [
         icon: 'mdi mdi-account-group',
         url: '/users',
     },
+    {
+        key: 'broadcast-mail',
+        label: 'Broadcast Mail',
+        isTitle: false,
+        icon: 'mdi mdi-email-newsletter',
+        url: '/broadcast-mail',
+    },
 
     { key: 'apps', label: 'Apps', isTitle: true },
     {
