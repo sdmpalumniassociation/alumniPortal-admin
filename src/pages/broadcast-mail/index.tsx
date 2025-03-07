@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { usePageTitle } from '../../hooks';
 import config from '../../config';
@@ -24,11 +24,9 @@ const BroadcastMail = () => {
     const [message, setMessage] = useState('');
     const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
     const [customEmails, setCustomEmails] = useState('');
-    const [groups, setGroups] = useState<UserGroup[]>([
-        { id: 'students', name: 'All Students' },
-        { id: 'alumni', name: 'Alumni' },
-        { id: 'faculty', name: 'Faculty Members' },
-        { id: 'custom', name: 'Custom' }
+    const [groups] = useState<UserGroup[]>([
+        { id: 'alumni', name: 'All Alumni' },
+        { id: 'custom', name: 'Custom Emails' }
     ]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -37,7 +35,7 @@ const BroadcastMail = () => {
     // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!subject.trim()) {
             setError('Subject is required');
             return;
@@ -64,38 +62,38 @@ const BroadcastMail = () => {
         setSuccess(null);
 
         try {
-            // This would be replaced with an actual API call in a real implementation
-            // const token = localStorage.getItem('adminToken');
-            // const response = await fetch(`${config.API_URL}/admin/broadcast-mail`, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Authorization': `Bearer ${token}`,
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         subject,
-            //         message,
-            //         groups: selectedGroups,
-            //         customEmails: selectedGroups.includes('custom') ? customEmails.split(',').map(email => email.trim()) : []
-            //     }),
-            // });
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${config.API_URL}/admin/broadcast-email`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subject,
+                    message,
+                    groups: selectedGroups,
+                    customEmails: selectedGroups.includes('custom')
+                        ? customEmails.split(',').map(email => email.trim())
+                        : []
+                }),
+            });
 
-            // Simulate API call for demonstration
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Simulate success
-            // const data = await response.json();
-            setSuccess('Email has been sent successfully to the selected groups!');
-            
-            // Reset form after successful submission
-            setSubject('');
-            setMessage('');
-            setSelectedGroups([]);
-            setCustomEmails('');
-            
+            const data = await response.json();
+
+            if (response.ok) {
+                setSuccess(data.message);
+                // Reset form
+                setSubject('');
+                setMessage('');
+                setSelectedGroups([]);
+                setCustomEmails('');
+            } else {
+                setError(data.message || 'Failed to send broadcast email');
+            }
         } catch (error) {
             console.error('Error sending broadcast mail:', error);
-            setError('An error occurred while sending the email. Please try again.');
+            setError('Network error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -115,13 +113,13 @@ const BroadcastMail = () => {
             <Card>
                 <Card.Body>
                     <h4 className="header-title mb-3">Send Broadcast Email</h4>
-                    
+
                     {error && (
                         <Alert variant="danger" className="my-2">
                             {error}
                         </Alert>
                     )}
-                    
+
                     {success && (
                         <Alert variant="success" className="my-2">
                             {success}
@@ -131,11 +129,11 @@ const BroadcastMail = () => {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Email Subject</Form.Label>
-                            <Form.Control 
-                                type="text" 
+                            <Form.Control
+                                type="text"
                                 value={subject}
                                 onChange={(e) => setSubject(e.target.value)}
-                                placeholder="Enter email subject" 
+                                placeholder="Enter email subject"
                                 required
                             />
                         </Form.Group>
@@ -144,7 +142,7 @@ const BroadcastMail = () => {
                             <Form.Label>Recipients</Form.Label>
                             <div className="d-flex flex-wrap">
                                 {groups.map((group) => (
-                                    <Form.Check 
+                                    <Form.Check
                                         key={group.id}
                                         type="checkbox"
                                         id={`group-${group.id}`}
@@ -155,12 +153,12 @@ const BroadcastMail = () => {
                                     />
                                 ))}
                             </div>
-                            
+
                             {selectedGroups.includes('custom') && (
                                 <div className="mt-2">
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder="Enter email addresses separated by commas" 
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter email addresses separated by commas"
                                         value={customEmails}
                                         onChange={(e) => setCustomEmails(e.target.value)}
                                     />
@@ -173,12 +171,12 @@ const BroadcastMail = () => {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Message Content</Form.Label>
-                            <Form.Control 
-                                as="textarea" 
+                            <Form.Control
+                                as="textarea"
                                 rows={8}
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
-                                placeholder="Compose your email message here" 
+                                placeholder="Compose your email message here"
                                 required
                             />
                         </Form.Group>
@@ -186,8 +184,8 @@ const BroadcastMail = () => {
                         <Row>
                             <Col>
                                 <Form.Group className="mb-0 text-end">
-                                    <Button 
-                                        type="submit" 
+                                    <Button
+                                        type="submit"
                                         variant="primary"
                                         disabled={isLoading}
                                     >
